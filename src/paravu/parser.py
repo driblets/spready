@@ -36,5 +36,5 @@ class ParavuDecoratorParser:
                     print(decor_arg.value.value)
 
 
-if __name__ == "__main__":
-    p = ParavuDecoratorParser("src").parse()
+# if __name__ == "__main__":
+#     p = ParavuDecoratorParser("src").parse()
