@@ -4,9 +4,9 @@ from redis import Redis
 import logging
 from rq import Worker
 
-logger = logging.getLogger("rq.worker")
-logger.propagate = False
-logger.disabled = True
+# logger = logging.getLogger("rq.worker")
+# logger.propagate = False
+# logger.disabled = True
 
 appLogger = logging.getLogger("app")
 appLogger.log(10, "Starting worker")

@@ -4,7 +4,7 @@ sys.path[0:0] = ['src/paravu']
 
 
 setup(
-    name='paravu',
+    name='spready',
     version='1.0',
     description='CRUD application for Google Sheet',
     author='muthugit',

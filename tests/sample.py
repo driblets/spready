@@ -1,4 +1,4 @@
-from paravu import papp
+from spready import papp
 
 @papp(path="/sample", method="GET")
 def execute(inp1: str): 
