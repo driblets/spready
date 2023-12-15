@@ -1,7 +1,7 @@
 import ast
 
 
-class ParavuDecoratorParser:
+class SpreadyDecoratorParser:
     def __init__(self, directoryPath: str):
         self.directoryPath = directoryPath
 
