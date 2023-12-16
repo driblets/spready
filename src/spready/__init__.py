@@ -1,1 +1,1 @@
-from .decor import papp
+from .decor import sproute

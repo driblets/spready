@@ -1,6 +1,6 @@
-from spready import papp
+from spready import sproute
 
-@papp(path="/sample", method="GET")
+@sproute(path="/customer/a", method="GET")
 def execute(inp1: str): 
     print("Hi")
     return "Hello"

@@ -1,9 +1,25 @@
+import os
 import ast
+from typing import List, Dict, Any
 
 
 class SpreadyDecoratorParser:
     def __init__(self, directoryPath: str):
         self.directoryPath = directoryPath
+        self.pyFiles: List[str] = []
+        self.readFilePaths()
+        self.spreadyRouts: Dict[str, Any] = {}
+        self.parse()
+
+    def readFilePaths(self):
+        filter = ".py"
+        for path, subdirs, files in os.walk(self.directoryPath):
+            for name in files:
+                _f = os.path.join(path, name)
+                if _f.lower().endswith(filter):
+                    self.pyFiles.append(_f)
+
+        return self.pyFiles
 
     @staticmethod
     def parse_ast(filename):
@@ -22,19 +38,27 @@ class SpreadyDecoratorParser:
         return functions
 
     def parse(self):
-        return self.parseModule("tests/sample.py")
-    
+        for f in self.pyFiles:
+            self.parseModule(f)
+        return self.spreadyRouts
+
     def parseModule(self, filePath: str):
         functions = self.get_functions(filePath)
+        modulePath = filePath.replace("/", ".").replace(".py", "")
         for func in functions:
-            print(func.name)
+            print(f"{filePath} -> {func.name}")
             decors = func.decorator_list
             for decor in decors:
-                for decor_arg in decor.keywords:
-                    print("")
-                    print(decor_arg.arg)
-                    print(decor_arg.value.value)
+                if decor.func.id == "sproute":
+                    for decor_arg in decor.keywords:
+                        if decor_arg.arg == "path":
+                            print(decor_arg.value.value)
+                            self.spreadyRouts[
+                                decor_arg.value.value
+                            ] = f"{modulePath}.{func.name}"
+        return self.spreadyRouts
 
 
-# if __name__ == "__main__":
-#     p = ParavuDecoratorParser("src").parse()
+if __name__ == "__main__":
+    p = SpreadyDecoratorParser("tests")
+    print(p.spreadyRouts)
