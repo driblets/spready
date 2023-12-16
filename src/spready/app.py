@@ -12,13 +12,14 @@ appLogger = logging.getLogger("app")
 appLogger.log(10, "Starting worker")
 
 
-def run(host, port, db, password):
+def run(host, port, db, password, modulePath="."):
     conn = Redis(
         host=host,
         port=port,
         db=db,
         password=password,
     )
+    os.environ["SPREADY_MODULES"] = modulePath
 
     # Provide the worker with the list of queues (str) to listen to.
     w = Worker(["myjob"], connection=conn, log_job_description=False)
