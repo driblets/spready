@@ -3,6 +3,7 @@ import os
 from redis import Redis
 import logging
 from rq import Worker
+import jwt
 
 
 # logger = logging.getLogger("rq.worker")
@@ -11,9 +12,19 @@ from rq import Worker
 
 appLogger = logging.getLogger("app")
 appLogger.log(10, "Starting worker")
+import json
+import jwt
+
+def run(credFilePath: str, modulePath: str):
+    with open(credFilePath, "r") as f:
+        creds = json.load(f)
+        if "privateKey" in creds:
+            _creds = jwt.decode(creds["privateKey"], creds["publicKey"], algorithms=["HS256"])
+            __run(_creds["__H"], _creds["__P"], _creds["__D"], _creds["__PW"], creds['publicKey'], modulePath)
 
 
-def run(host, port, db, password, modulePath="."):
+def __run(host, port, db, password, channel, modulePath="."):
+    print(f"Running => {host}")
     conn = Redis(
         host=host,
         port=port,
@@ -23,13 +34,9 @@ def run(host, port, db, password, modulePath="."):
     os.environ["SPREADY_MODULES"] = modulePath
 
     # Provide the worker with the list of queues (str) to listen to.
-    w = Worker(["myjob"], connection=conn, log_job_description=False)
+    w = Worker([channel], connection=conn, log_job_description=False)
     w.work()
 
 if __name__ == "__main__":
-    run(
-        os.getenv("REDIS_HOST"),
-        os.getenv("REDIS_PORT"),
-        0,
-        os.getenv("REDIS_PASSWORD"),
-    )   
+    import sys
+    run(sys.argv[1])
