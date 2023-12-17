@@ -1,6 +1,6 @@
 from spready import sproute
 
-@sproute(path="/path")
+@sproute(path="/client/a")
 def execute(): 
     print("Hi")
     return "Hello"

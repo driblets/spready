@@ -5,7 +5,7 @@ sys.path[0:0] = ['src/spready']
 
 setup(
     name='spready',
-    version='1.3',
+    version='1.4',
     description='Spready APP',
     long_description='Spready distributed API',
     author='muthugit',
@@ -13,4 +13,9 @@ setup(
     url='https://muthupandian.in',
     packages=(find_packages(where="src")),
     package_dir={"": "src"},
+    entry_points={
+        'console_scripts': [
+            'spready=spready:cliApp'
+        ]
+    },
 )

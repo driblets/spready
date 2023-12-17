@@ -38,6 +38,7 @@ def __run(host, port, db, password, channel, modulePath="."):
         password=password,
     )
     os.environ["SPREADY_MODULES"] = modulePath
+    print(os.environ["SPREADY_MODULES"])
 
     # Provide the worker with the list of queues (str) to listen to.
     w = Worker([channel], connection=conn, log_job_description=False)
@@ -45,6 +46,6 @@ def __run(host, port, db, password, channel, modulePath="."):
 
 # if __name__ == "__main__":
 #     import sys
-#     run(sys.argv[1])
+#     run(sys.argv[1]) 
     
 # register(EnvURLS.DEV)
