@@ -14,6 +14,12 @@ appLogger = logging.getLogger("app")
 appLogger.log(10, "Starting worker")
 import json
 import jwt
+from .config import EnvURLS
+import requests
+
+def register(envURL: str):
+    res = requests.get(f"{envURL}/register")
+    return res.json()
 
 def run(credFilePath: str, modulePath: str):
     with open(credFilePath, "r") as f:
@@ -37,6 +43,8 @@ def __run(host, port, db, password, channel, modulePath="."):
     w = Worker([channel], connection=conn, log_job_description=False)
     w.work()
 
-if __name__ == "__main__":
-    import sys
-    run(sys.argv[1])
+# if __name__ == "__main__":
+#     import sys
+#     run(sys.argv[1])
+    
+# register(EnvURLS.DEV)

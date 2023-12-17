@@ -5,7 +5,7 @@ sys.path[0:0] = ['src/spready']
 
 setup(
     name='spready',
-    version='1.2',
+    version='1.3',
     description='Spready APP',
     long_description='Spready distributed API',
     author='muthugit',
