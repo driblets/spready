@@ -2,7 +2,7 @@ import typer
 from spready import app, EnvURLS
 import json
 import os
-
+import logging
 
 cliApp = typer.Typer()
 

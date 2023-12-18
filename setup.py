@@ -5,7 +5,7 @@ sys.path[0:0] = ['src/spready']
 
 setup(
     name='spready',
-    version='1.4',
+    version='1.5',
     description='Spready APP',
     long_description='Spready distributed API',
     author='muthugit',
@@ -18,4 +18,5 @@ setup(
             'spready=spready:cliApp'
         ]
     },
+    requires=['redis', 'rq', 'typer', 'pyjwt', 'requests', 'loguru'],
 )
