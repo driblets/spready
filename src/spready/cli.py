@@ -23,6 +23,10 @@ def register(credential_path: str):
           URL: {EnvURLS.PROD}
           Use `{result['publicKey']}` in API header `x-auth-token` to authenticate
 
+          To create your router module, please refer
+
+          https://driblets.gitbook.io/spready/sproute
+
         """)
 
 
