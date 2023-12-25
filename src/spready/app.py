@@ -20,6 +20,10 @@ import jwt
 # from .config import EnvURLS
 import requests
 
+os.environ["OBJC_DISABLE_INITIALIZE_FORK_SAFETY"] = "YES"
+os.environ["no_proxy"] = "*"
+print(os.environ.get("OBJC_DISABLE_INITIALIZE_FORK_SAFETY"))
+
 def register(envURL: str):
     res = requests.get(f"{envURL}/register")
     return res.json()
@@ -51,6 +55,7 @@ def __run(host, port, db, password, channel, modulePath="."):
 
                 """)
     os.environ["SPREADY_MODULES"] = modulePath
+    
 
     # Provide the worker with the list of queues (str) to listen to.
     w = Worker([channel], connection=conn, log_job_description=False)

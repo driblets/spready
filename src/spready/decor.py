@@ -23,7 +23,10 @@ class sproute(object):
                 headers=headers,
                 json=res
             )
-            self.logger.debug(f"Updated status")
+            if statusUpdate.status_code != 200:
+                self.logger.warning(f"Failed to update status: {statusUpdate.status_code}")
+            else:
+                self.logger.debug(f"Updated status successfully!")
         except Exception as _e:
             self.logger.warning(f"Failed to update status: {_e}")
         
