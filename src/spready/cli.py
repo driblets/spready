@@ -1,5 +1,5 @@
 import typer
-from spready import app, EnvURLS
+from spready import app, getEnvURL
 import json
 import os
 import logging
@@ -9,7 +9,7 @@ cliApp = typer.Typer()
 
 @cliApp.command()
 def register(credential_path: str):
-    result = app.register(EnvURLS.PROD)
+    result = app.register(getEnvURL())
     with open(credential_path, "w") as f:
         json.dump(result, f)
     print(f"""
@@ -20,7 +20,7 @@ def register(credential_path: str):
         │  You've successfully registered your worker   │
         └───────────────────────────────────────────────┘
           
-          URL: {EnvURLS.PROD}
+          URL: {getEnvURL()}
           Use `{result['publicKey']}` in API header `x-auth-token` to authenticate
 
           To create your router module, please refer
@@ -32,8 +32,6 @@ def register(credential_path: str):
 
 @cliApp.command()
 def run(creditial_path: str, module_path: str):
-    print(f"Setting path: {module_path}")
-    print(os.getcwd())
     app.run(creditial_path, modulePath=module_path)
 
 

@@ -46,13 +46,11 @@ class SpreadyDecoratorParser:
         functions = self.get_functions(filePath)
         modulePath = filePath.replace("/", ".").replace(".py", "")
         for func in functions:
-            print(f"{filePath} -> {func.name}")
             decors = func.decorator_list
             for decor in decors:
                 if decor.func.id == "sproute":
                     for decor_arg in decor.keywords:
                         if decor_arg.arg == "path":
-                            print(decor_arg.value.value)
                             self.spreadyRouts[
                                 decor_arg.value.value
                             ] = f"{modulePath}.{func.name}"

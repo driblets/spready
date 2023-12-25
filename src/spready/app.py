@@ -6,6 +6,8 @@ from rq import Worker
 import jwt
 from loguru import logger
 
+from spready.config import getEnvURL
+
 
 rqLogger = logging.getLogger("rq.worker")
 rqLogger.propagate = False
@@ -15,7 +17,7 @@ appLogger = logging.getLogger("app")
 appLogger.log(10, "Starting worker")
 import json
 import jwt
-from .config import EnvURLS
+# from .config import EnvURLS
 import requests
 
 def register(envURL: str):
@@ -26,7 +28,6 @@ def run(credFilePath: str, modulePath: str):
     with open(credFilePath, "r") as f:
         creds = json.load(f)
         if "privateKey" in creds:
-            logger.info(f"Starting distributed API")
             _creds = jwt.decode(creds["privateKey"], creds["publicKey"], algorithms=["HS256"])
             __run(_creds["__H"], _creds["__P"], _creds["__D"], _creds["__PW"], creds['publicKey'], modulePath)
 
@@ -38,8 +39,18 @@ def __run(host, port, db, password, channel, modulePath="."):
         db=db,
         password=password,
     )
+    logger.info(f"""
+                
+                Starting Spread-Y Worker
+                ~~~~~~~~~~~~~~~~~~~~~~~~
+                
+                Channel     : {channel}
+                Module      : {modulePath}
+                API         : {getEnvURL()}
+
+
+                """)
     os.environ["SPREADY_MODULES"] = modulePath
-    logger.info(f'Module path: {os.environ["SPREADY_MODULES"]}')
 
     # Provide the worker with the list of queues (str) to listen to.
     w = Worker([channel], connection=conn, log_job_description=False)
