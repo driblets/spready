@@ -17,19 +17,17 @@ class sproute(object):
         self.logger = logger
 
     def updateStatus(self, statusURL, res, headers):
+        self.logger.info("Updating status")
         try:
-            statusUpdate = requests.post(
-                statusURL,
-                headers=headers,
-                json=res
-            )
+            statusUpdate = requests.post(statusURL, headers=headers, json=res)
             if statusUpdate.status_code != 200:
-                self.logger.warning(f"Failed to update status: {statusUpdate.status_code}")
+                self.logger.warning(
+                    f"Failed to update status: {statusUpdate.status_code}"
+                )
             else:
                 self.logger.debug(f"Updated status successfully!")
         except Exception as _e:
             self.logger.warning(f"Failed to update status: {_e}")
-        
 
     def __call__(self, original_func):
         decorator_self = self
@@ -37,20 +35,24 @@ class sproute(object):
         def wrappee(*args, **kwargs):
             res = None
             if type(args[0]) == SPRequest:
-                if args[0].requestType not in self.methods:
-                    raise ValueError("Method not allowed")
-                res = original_func(*args, **kwargs)
+                data = args[0]
+                statusURL = f"{getEnvURL()}/status/{data.headers['x-spready-job-id']}"
+                headers = {"x-auth-token": data.headers["X-Auth-Token"]}
                 try:
-                    data = args[0]
-                    statusURL = f"{getEnvURL()}/status/{data.headers['x-spready-job-id']}"
-                    headers = {
-                        "x-auth-token": data.headers["X-Auth-Token"]
-                    }
+                    if args[0].requestType not in self.methods:
+                        self.logger.error(f"Method not allowed {args[0].requestType}")
+                        raise ValueError("Method not allowed")
+                    res = original_func(*args, **kwargs)
+
+                    
                     self.logger.debug(f"Updating status")
                     self.updateStatus(statusURL, res, headers)
-                    
                 except Exception as _e:
-                    print(_e)
+                    res = {"error": str(_e)}
+                    self.logger.error(f"Error: {_e}")
+                    self.logger.info(f"Updating status {statusURL}, {res}, {headers}")
+                    self.updateStatus(statusURL, res, headers)
+                    self.logger.info("Updated status...")
             return res
 
         return wrappee
