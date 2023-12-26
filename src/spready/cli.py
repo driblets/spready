@@ -1,8 +1,11 @@
+from loguru import logger
 import typer
 from spready import app, getEnvURL
 import json
 import os
 import logging
+
+from spready.parser import SpreadyDecoratorParser
 
 cliApp = typer.Typer()
 
@@ -32,6 +35,7 @@ def register(credential_path: str):
 
 @cliApp.command()
 def run(creditial_path: str, module_path: str):
+    
     app.run(creditial_path, modulePath=module_path)
 
 

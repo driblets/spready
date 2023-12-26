@@ -7,6 +7,7 @@ import jwt
 from loguru import logger
 
 from spready.config import getEnvURL
+from spready.parser import SpreadyDecoratorParser
 
 
 rqLogger = logging.getLogger("rq.worker")
@@ -55,6 +56,16 @@ def __run(host, port, db, password, channel, modulePath="."):
 
                 """)
     os.environ["SPREADY_MODULES"] = modulePath
+
+    parser = SpreadyDecoratorParser(modulePath)
+    spreadyModules = parser.spreadyRouts
+
+
+    mStr = "\t~~~~~~~ APIs ~~~~~~~\n"
+    for mod in spreadyModules:
+        mStr += f"\n\t{mod} : {spreadyModules[mod]}\n"
+    print(f"""{mStr}""")
+
     
 
     # Provide the worker with the list of queues (str) to listen to.
